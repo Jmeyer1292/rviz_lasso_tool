@@ -1,0 +1,8 @@
+<library path="lib/librviz_lasso_tool">
+  <class name="rviz_lasso_tool/RvizLassoTool" type="rviz_lasso_tool::RvizLassoTool" base_class_type="rviz::Tool">
+    <description>
+      Tool for lasso-ing points
+    </description>
+  </class>
+</library>
+
