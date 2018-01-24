@@ -1,5 +1,7 @@
 #include "rviz_lasso_tool/selection_visualization.h"
+#include "rviz_lasso_tool/ramer_douglas_peucker_simplification.h"
 
+#include <ros/console.h>
 
 rviz_lasso_tool::SelectionVisualization::SelectionVisualization(const Ogre::String &name)
   : Ogre::ManualObject(name)
@@ -32,17 +34,22 @@ void rviz_lasso_tool::SelectionVisualization::setCorners(float left, float top, 
 
 void rviz_lasso_tool::SelectionVisualization::setPolygon(const std::vector<std::pair<float, float>>& coords)
 {
+  ROS_INFO_STREAM("INPUT COORDS: " << coords.size());
+  auto clone = rdp_simplification(coords, 0.025);
+
+  ROS_INFO_STREAM("After RDP: " << clone.size());
+
   clear();
   begin("Examples/KnotTexture", Ogre::RenderOperation::OT_LINE_STRIP);
 
-  for (const auto& pos : coords)
+  for (const auto& pos : clone)
   {
     position(pos.first, pos.second, -1);
   }
 
-  if (!coords.empty()) // Complete the lasso loop
+  if (!clone.empty()) // Complete the lasso loop
   {
-    position(coords.front().first, coords.front().second, -1);
+    position(clone.front().first, clone.front().second, -1);
   }
 
   end();

@@ -43,6 +43,7 @@ qt5_wrap_cpp(MOC_FILES include/${PROJECT_NAME}/rviz_lasso_tool.h)
 add_library(${PROJECT_NAME}
  src/${PROJECT_NAME}/rviz_lasso_tool.cpp
  src/${PROJECT_NAME}/selection_visualization.cpp
+ src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
  ${MOC_FILES}
 )
 
