@@ -3,6 +3,7 @@
 
 #include <rviz/tool.h>
 #include <rviz_lasso_tool/selection_visualization.h>
+#include <ros/publisher.h>
 
 namespace rviz_lasso_tool
 {
@@ -19,6 +20,8 @@ public:
 
   virtual int processMouseEvent( rviz::ViewportMouseEvent& event );
 
+  void publishCurrent();
+
 private:
   std::vector<std::pair<float,float>> current_selection_;
   SelectionVisualization* vis_;
@@ -27,6 +30,9 @@ private:
   float start_rel_y_;
   int last_x_;
   int last_y_;
+
+  ros::Publisher pub_;
+
 };
 
 }

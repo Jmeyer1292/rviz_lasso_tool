@@ -5,6 +5,8 @@
 
 #include <pluginlib/class_list_macros.h>
 
+#include <rviz/display_context.h>
+#include <ros/node_handle.h>
 
 static float toRelative(const int sample, const int axis_length)
 {
@@ -14,6 +16,9 @@ static float toRelative(const int sample, const int axis_length)
 void rviz_lasso_tool::RvizLassoTool::onInitialize() {
   ROS_INFO("On init");
   vis_ = nullptr;
+
+//  ros::NodeHandle nh;
+//  pub_ = nh.advertise<std_msgs::Lasso>
 }
 
 void rviz_lasso_tool::RvizLassoTool::activate() {
@@ -44,6 +49,15 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
   else if (event.leftUp()) // End this selection event
   {
     ROS_INFO("Done");
+    publishCurrent();
+
+    Ogre::Camera* cam = event.viewport->getCamera();
+    const auto focal_length = cam->getFocalLength();
+    const auto cam_pos = cam->getPosition();
+    const auto cam_orient = cam->getOrientation();
+
+
+
     current_selection_.clear();
   }
   else if (event.left()) // Continue this selection event
@@ -69,6 +83,10 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
     vis_->setPolygon(current_selection_);
   }
   return 0;
+}
+
+void rviz_lasso_tool::RvizLassoTool::publishCurrent()
+{
 }
 
 PLUGINLIB_EXPORT_CLASS(rviz_lasso_tool::RvizLassoTool, rviz::Tool)
