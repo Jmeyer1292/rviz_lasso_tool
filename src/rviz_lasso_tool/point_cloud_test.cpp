@@ -1,6 +1,7 @@
 #include <rviz_lasso_tool/rviz_lasso_tool.h>
 #include <eigen_conversions/eigen_msg.h>
 #include <pcl/filters/extract_indices.h>
+#include <rviz_lasso_tool/ramer_douglas_peucker_simplification.h>
 #include <Eigen/Dense>
 
 static Eigen::Affine3d toEigen(const Ogre::Matrix4& m)
@@ -66,7 +67,13 @@ boost::shared_ptr<std::vector<int>> inside(const std::vector<std::pair<float,flo
   {
     const auto& pt = cloud[i];
     Eigen::Vector4d p_e (pt.x, pt.y, pt.z, 1);
+
+//    Eigen::Vector4d tmp = cam_pose_inv * p_e;
+//    ROS_INFO_STREAM("TMP: " << tmp.transpose());
     Eigen::Vector4d p = projection * cam_pose_inv * p_e;
+//    ROS_INFO_STREAM("p_e: " << p_e.transpose());
+//    ROS_INFO_STREAM("p: " << p.transpose());
+
     p /= p(2);
     if (pnpoly2(verts, p(0), p(1)))
     {
@@ -90,12 +97,15 @@ void rviz_lasso_tool::PointCloudTest::test(const std::vector<std::pair<float,flo
   ROS_INFO("What what");
 
   auto proj1 = toEigen(cam->getProjectionMatrix());
-  ROS_INFO_STREAM("Proj:\n" << proj1.matrix());
+  proj1.matrix()(2, 3) = 0.0;
 
   Eigen::Affine3d cam_pose_eigen;
   tf::poseMsgToEigen(cam_pose.pose, cam_pose_eigen);
 
-  auto indices = inside(verts, *cloud_, cam_pose_eigen.inverse(), proj1);
+  ROS_INFO_STREAM("Proj:\n" << proj1.matrix());
+//  ROS_INFO_STREAM("Proj:\n" << proj1.matrix());
+
+  auto indices = inside(rdp_simplification(verts, 0.01), *cloud_, cam_pose_eigen.inverse(), proj1);
 
   pcl::ExtractIndices<pcl::PointXYZ> extract;
 

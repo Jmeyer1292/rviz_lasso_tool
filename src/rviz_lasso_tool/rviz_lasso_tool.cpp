@@ -17,6 +17,7 @@ void rviz_lasso_tool::RvizLassoTool::onInitialize() {
   ROS_INFO("On init");
   vis_ = nullptr;
   cloud_test_ = new PointCloudTest("/home/jon/test.pcd");
+  this->shortcut_key_ = 'l';
 
 //  ros::NodeHandle nh;
 //  pub_ = nh.advertise<std_msgs::Lasso>
