@@ -3,6 +3,7 @@
 
 #include <rviz/tool.h>
 #include <rviz_lasso_tool/selection_visualization.h>
+#include <rviz_lasso_tool/point_cloud_test.h>
 #include <ros/publisher.h>
 
 namespace rviz_lasso_tool
@@ -25,6 +26,7 @@ public:
 private:
   std::vector<std::pair<float,float>> current_selection_;
   SelectionVisualization* vis_;
+  PointCloudTest* cloud_test_;
 
   float start_rel_x_;
   float start_rel_y_;

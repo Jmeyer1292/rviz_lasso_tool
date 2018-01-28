@@ -9,6 +9,8 @@ link_directories(${catkin_LIBRARY_DIRS})
 
  find_package(catkin REQUIRED COMPONENTS
   rviz
+  pcl_ros
+  eigen_conversions
 )
 
 catkin_package(
@@ -20,6 +22,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${pcl_INCLUDE_DIRS}
 )
 
 # QT Stuff
@@ -44,6 +47,7 @@ add_library(${PROJECT_NAME}
  src/${PROJECT_NAME}/rviz_lasso_tool.cpp
  src/${PROJECT_NAME}/selection_visualization.cpp
  src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
+ src/${PROJECT_NAME}/point_cloud_test.cpp
  ${MOC_FILES}
 )
 

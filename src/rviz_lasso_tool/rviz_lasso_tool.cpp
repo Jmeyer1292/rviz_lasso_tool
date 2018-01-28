@@ -16,6 +16,7 @@ static float toRelative(const int sample, const int axis_length)
 void rviz_lasso_tool::RvizLassoTool::onInitialize() {
   ROS_INFO("On init");
   vis_ = nullptr;
+  cloud_test_ = new PointCloudTest("/home/jon/test.pcd");
 
 //  ros::NodeHandle nh;
 //  pub_ = nh.advertise<std_msgs::Lasso>
@@ -56,7 +57,22 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
     const auto cam_pos = cam->getPosition();
     const auto cam_orient = cam->getOrientation();
 
+    // Fetch this data
+    const auto fixed_frame = this->context_->getFixedFrame().toStdString();
 
+    geometry_msgs::PoseStamped pose_stamped;
+    pose_stamped.header.frame_id = fixed_frame;
+
+    pose_stamped.pose.position.x = cam_pos.x;
+    pose_stamped.pose.position.y = cam_pos.y;
+    pose_stamped.pose.position.z = cam_pos.z;
+
+    pose_stamped.pose.orientation.x = cam_orient.x;
+    pose_stamped.pose.orientation.y = cam_orient.y;
+    pose_stamped.pose.orientation.z = cam_orient.z;
+    pose_stamped.pose.orientation.w = cam_orient.w;
+
+    cloud_test_->test(current_selection_, pose_stamped, focal_length, cam);
 
     current_selection_.clear();
   }
