@@ -4,7 +4,7 @@
   <version>0.0.0</version>
   <description>The rviz_lasso_tool package</description>
 
-  <author email="jmeyer@swri.org">Jonathan Meyer</maintainer>
+  <author email="jmeyer@swri.org">Jonathan Meyer</author>
   <maintainer email="jmeyer@swri.org">Jonathan Meyer</maintainer>
 
   <license>GPLv3</license>
