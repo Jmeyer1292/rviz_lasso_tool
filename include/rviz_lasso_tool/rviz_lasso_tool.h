@@ -13,7 +13,6 @@ class RvizLassoTool : public rviz::Tool
 {
   Q_OBJECT
 public:
-
   virtual void onInitialize();
 
   virtual void activate();

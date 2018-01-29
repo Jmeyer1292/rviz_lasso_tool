@@ -8,6 +8,8 @@
 #include <rviz/display_context.h>
 #include <ros/node_handle.h>
 
+#include <rviz_lasso_tool/UserSelection.h>
+
 static float toRelative(const int sample, const int axis_length)
 {
   return (static_cast<float>(sample) / axis_length) * 2 - 1.0;
@@ -19,8 +21,8 @@ void rviz_lasso_tool::RvizLassoTool::onInitialize() {
   cloud_test_ = new PointCloudTest("/home/jon/test.pcd");
   this->shortcut_key_ = 'l';
 
-//  ros::NodeHandle nh;
-//  pub_ = nh.advertise<std_msgs::Lasso>
+  ros::NodeHandle nh;
+  pub_ = nh.advertise<rviz_lasso_tool::UserSelection>("user_selection", 1, false);
 }
 
 void rviz_lasso_tool::RvizLassoTool::activate() {
@@ -74,6 +76,11 @@ int rviz_lasso_tool::RvizLassoTool::processMouseEvent(rviz::ViewportMouseEvent &
     pose_stamped.pose.orientation.w = cam_orient.w;
 
     cloud_test_->test(current_selection_, pose_stamped, focal_length, cam);
+
+    if (event.shift())
+      ROS_WARN("SHIFT!");
+    else if (event.control())
+      ROS_WARN("CONTROL!");
 
     current_selection_.clear();
   }

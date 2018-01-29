@@ -4,19 +4,31 @@ project(rviz_lasso_tool)
 # Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
-include_directories(${catkin_INCLUDE_DIRS})
-link_directories(${catkin_LIBRARY_DIRS})
+# include_directories(${catkin_INCLUDE_DIRS})
+# link_directories(${catkin_LIBRARY_DIRS})
 
- find_package(catkin REQUIRED COMPONENTS
+find_package(catkin REQUIRED COMPONENTS
   rviz
   pcl_ros
   eigen_conversions
+  geometry_msgs
+  message_generation
+)
+
+add_message_files(
+  FILES
+  UserSelection.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
 )
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS rviz
+  CATKIN_DEPENDS rviz message_runtime pcl_ros eigen_conversions geometry_msgs
 )
 
 include_directories(
@@ -27,20 +39,11 @@ include_directories(
 
 # QT Stuff
 add_definitions(-DQT_NO_KEYWORDS)
-#set(CMAKE_AUTOMOC ON)
 
-if(rviz_QT_VERSION VERSION_LESS "5")
-  message(STATUS "Using Qt4 based on the rviz_QT_VERSION: ${rviz_QT_VERSION}")
-  find_package(Qt4 ${rviz_QT_VERSION} EXACT REQUIRED QtCore QtGui)
-  ## pull in all required include dirs, define QT_LIBRARIES, etc.
-  include(${QT_USE_FILE})
-else()
-  message(STATUS "Using Qt5 based on the rviz_QT_VERSION: ${rviz_QT_VERSION}")
-  find_package(Qt5 ${rviz_QT_VERSION} EXACT REQUIRED Core Widgets)
-  ## make target_link_libraries(${QT_LIBRARIES}) pull in all required dependencies
-  set(QT_LIBRARIES Qt5::Widgets)
-endif()
+find_package(Qt5 ${rviz_QT_VERSION} EXACT REQUIRED Core Widgets)
+set(QT_LIBRARIES Qt5::Widgets)
 
+# QMOC
 qt5_wrap_cpp(MOC_FILES include/${PROJECT_NAME}/rviz_lasso_tool.h)
 
 add_library(${PROJECT_NAME}
