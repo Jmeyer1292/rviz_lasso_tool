@@ -12,8 +12,6 @@ public:
   SelectionVisualization(const Ogre::String& name);
   virtual ~SelectionVisualization();
 
-  void setCorners(float left, float top, float right, float bottom);
-
   void setPolygon(const std::vector<std::pair<float,float>>& coords);
 };
 

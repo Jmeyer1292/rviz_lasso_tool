@@ -3,8 +3,10 @@
 
 #include <rviz/tool.h>
 #include <rviz_lasso_tool/selection_visualization.h>
-#include <rviz_lasso_tool/point_cloud_test.h>
 #include <ros/publisher.h>
+
+#include <geometry_msgs/PoseStamped.h>
+#include <Eigen/Dense>
 
 namespace rviz_lasso_tool
 {
@@ -13,27 +15,23 @@ class RvizLassoTool : public rviz::Tool
 {
   Q_OBJECT
 public:
-  virtual void onInitialize();
+  RvizLassoTool();
 
-  virtual void activate();
-  virtual void deactivate();
+  virtual void onInitialize() override;
 
-  virtual int processMouseEvent( rviz::ViewportMouseEvent& event );
+  virtual void activate() override;
+  virtual void deactivate() override;
 
-  void publishCurrent();
+  virtual int processMouseEvent(rviz::ViewportMouseEvent& event) override;
+
+  void publishSelection(const rviz::ViewportMouseEvent& event);
 
 private:
-  std::vector<std::pair<float,float>> current_selection_;
   SelectionVisualization* vis_;
-  PointCloudTest* cloud_test_;
-
-  float start_rel_x_;
-  float start_rel_y_;
+  std::vector<std::pair<float,float>> current_selection_;
   int last_x_;
   int last_y_;
-
   ros::Publisher pub_;
-
 };
 
 }

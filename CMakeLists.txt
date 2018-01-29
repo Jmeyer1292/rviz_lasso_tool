@@ -46,11 +46,11 @@ set(QT_LIBRARIES Qt5::Widgets)
 # QMOC
 qt5_wrap_cpp(MOC_FILES include/${PROJECT_NAME}/rviz_lasso_tool.h)
 
+# Core Library for the RVIZ plugin
 add_library(${PROJECT_NAME}
  src/${PROJECT_NAME}/rviz_lasso_tool.cpp
  src/${PROJECT_NAME}/selection_visualization.cpp
  src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
- src/${PROJECT_NAME}/point_cloud_test.cpp
  ${MOC_FILES}
 )
 
@@ -59,6 +59,32 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${QT_LIBRARIES}
+)
+
+## Utility library for handling the selection, testing if points are in a poly, etc...
+#add_library(rviz_selection_utils
+# src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
+# src/${PROJECT_NAME}/point_cloud_test.cpp
+## src/${PROJECT_NAME}/point_cloud_test.cpp
+#)
+
+#add_dependencies(rviz_selection_utils ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+#target_link_libraries(rviz_selection_utils
+#  ${catkin_LIBRARIES}
+#)
+
+# Demonstration Node that Handles Input from the Plugin
+add_executable(rviz_lasso_tool_demo
+  src/demo_node.cpp
+  src/${PROJECT_NAME}/ramer_douglas_peucker_simplification.cpp
+)
+
+add_dependencies(rviz_lasso_tool_demo ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(rviz_lasso_tool_demo
+  ${catkin_LIBRARIES}
+#  rviz_selection_utils
 )
 
 ## Mark executables and/or libraries for installation
